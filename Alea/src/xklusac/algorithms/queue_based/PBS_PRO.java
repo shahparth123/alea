@@ -106,7 +106,24 @@ public class PBS_PRO implements SchedulingPolicy {
             }
             // All remaining non standard queues are considered to be normal
             Scheduler.q3.addLast(gi);
-        } else {
+        } else if (Scheduler.data_set.contains("UniLu")) {
+              if (gi.getQueue().equals("0")) {
+                Scheduler.q1.addLast(gi);
+                Scheduler.runtime += (new Date().getTime() - runtime1);
+                return;
+            }
+            if (gi.getQueue().equals("1")) {
+                Scheduler.q2.addLast(gi);
+                Scheduler.runtime += (new Date().getTime() - runtime1);
+                return;
+            }
+            if (gi.getQueue().equals("2")) {
+                Scheduler.q3.addLast(gi);
+                Scheduler.runtime += (new Date().getTime() - runtime1);
+                return;
+            }
+          
+            } else {
             if (gi.getQueue().equals("short")) {
                 Scheduler.short_queue.addLast(gi);
                 Scheduler.runtime += (new Date().getTime() - runtime1);
@@ -181,10 +198,20 @@ public class PBS_PRO implements SchedulingPolicy {
             for (int i = 0; i < Scheduler.queue.size(); i++) {
                 
                 GridletInfo gi = (GridletInfo) Scheduler.queue.get(i);
-                
+                /*extra testing*/
+                int[] a=new int[100];
+                int[] b=new int[100];
                 for (int j = 0; j < Scheduler.resourceInfoList.size(); j++) {
                     ResourceInfo ri = (ResourceInfo) Scheduler.resourceInfoList.get(j);
-                    if (Scheduler.isSuitable(ri, gi) && ri.canExecuteNow(gi)) {
+                    a[j]=ri.resource.getNumPE();
+                    b[j]=ri.resource.getNumFreePE();
+                //    System.out.println("j: "+j+"Total PE:"+a[j]+" Free:" +b[j]);
+                }               
+                /* extra testing end*/
+                for (int j = 0; j < Scheduler.resourceInfoList.size(); j++) {
+                    ResourceInfo ri = (ResourceInfo) Scheduler.resourceInfoList.get(j);
+                  //  System.out.println("Gridlet ID:"+gi.getID()+" Resource free: "+ri.nowFreePE+"Resource Name"+ri.resource.getResourceName()+" ID:"+ri.resource.getResourceID());
+                    if ((b[j]>a[j]/2) && Scheduler.isSuitable(ri, gi) && ri.canExecuteNow(gi)) {
                         r_cand = ri;
                         break;
                     }

@@ -613,7 +613,7 @@ public class Scheduler extends GridSim {
             resourceInfoList = new ArrayList();
             if (resList.size() > 0) {
                 totalResource = resList.size();
-                System.out.println("GridResource/Cluster count: " + totalResource);
+                System.out.println("Available GridResource/Cluster count: " + totalResource);
                 resourceID = new int[totalResource];
                 resourceName = new String[totalResource];
                 // a loop to get all the resources available
@@ -627,6 +627,7 @@ public class Scheduler extends GridSim {
                     // get their names as well
                     resourceName[i] = GridSim.getEntityName(resourceID[i]);
                     int res_id = ((Integer) resList.get(i)).intValue();
+                    System.out.println("Resoursename:"+resourceName[i]+" Resource Id:"+res_id);
                     // Get Resource Characteristic Info
                     ComplexResourceCharacteristics res = (ComplexResourceCharacteristics) super.getResourceCharacteristics(res_id);
                     ResourceInfo ri = new ResourceInfo(res);
